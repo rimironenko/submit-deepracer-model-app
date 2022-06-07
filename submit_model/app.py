@@ -6,5 +6,5 @@ def lambda_handler(event, context):
     leaderboard_arn = event['LeaderboardArn']
     dr_client = deepracer_client()
     # models = dr_client.list_models(ModelType="REINFORCEMENT_LEARNING", MaxResults=100)["Models"]
-    return dr_client.create_leaderboard_submission(model_arn, leaderboard_arn)
+    return dr_client.create_leaderboard_submission(ModelArn=model_arn, LeaderboardArn=leaderboard_arn)
 
