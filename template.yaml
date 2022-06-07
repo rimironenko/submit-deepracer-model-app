@@ -15,12 +15,6 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       PackageType: Image
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /submit
-            Method: get
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -31,6 +25,7 @@ Resources:
                 - deepracer:ListModels
                 - deepracer:GetLeaderboard
                 - deepracer:CreateLeaderboardSubmission
+                - deepracer:GetLatestUserSubmission
               Resource: '*'
     Metadata:
       DockerTag: python3.7-v1
@@ -41,9 +36,6 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  SubmitModelFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/submit/"
   SubmitModelFunction:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt SubmitModelFunction.Arn
