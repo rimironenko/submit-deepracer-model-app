@@ -10,5 +10,5 @@ def lambda_handler(event, context):
         print("No running leaderboard submissions were found. Creating a new one.")
         return dr_client.create_leaderboard_submission(ModelArn=model_arn, LeaderboardArn=leaderboard_arn)
     print('There is a currently running leaderboard submission. Please see its status as the lambda output.')
-    return latest_submission['LeaderboardSubmission']
+    return latest_submission
 
