@@ -21,6 +21,17 @@ Resources:
           Properties:
             Path: /submit
             Method: get
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - deepracer:ListLeaderboards
+                - deepracer:GetModel
+                - deepracer:ListModels
+                - deepracer:GetLeaderboard
+                - deepracer:CreateLeaderboardSubmission
+              Resource: '*'
     Metadata:
       DockerTag: python3.7-v1
       DockerContext: ./submit_model
