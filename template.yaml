@@ -10,6 +10,14 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  ModelArn:
+    Type: String
+    Description: The ARN of the DeepRacer model that will be submitted by a job
+  LeaderboardArn:
+    Type: String
+    Description: The ARN of the Virtual Circuit race where the model will be submitted
+
 Resources:
   SubmitModelFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -27,6 +35,12 @@ Resources:
                 - deepracer:CreateLeaderboardSubmission
                 - deepracer:GetLatestUserSubmission
               Resource: '*'
+      Events:
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+            Input: !Sub '{"ModelArn": "${ModelArn}","LeaderboardArn": "${LeaderboardArn}"}'
     Metadata:
       DockerTag: python3.7-v1
       DockerContext: ./submit_model
