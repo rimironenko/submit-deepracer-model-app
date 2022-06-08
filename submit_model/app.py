@@ -9,5 +9,6 @@ def lambda_handler(event, context):
     if latest_submission['LeaderboardSubmissionStatusType'] == 'SUCCESS':
         print("No running leaderboard submissions were found. Creating a new one.")
         dr_client.create_leaderboard_submission(ModelArn=model_arn, LeaderboardArn=leaderboard_arn)
-    print('There is a currently running leaderboard submission. Please see its status below.')
-    print(latest_submission)
+    else:
+        print('There is a currently running leaderboard submission. Please see its status below.')
+        print(latest_submission)
