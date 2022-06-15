@@ -1,7 +1,11 @@
 # submit-deepracer-model-app
 
 This project is an AWS serverless application that automatically submits an AWS DeepRacer Model to a given AWS Virtual Circuit race.
+
+The submission is scheduled for 1 minute by Amazon EventBridge rule. The Lambda function code checks whether there is a running submission. If there is no running one, the function creates a new submission. If there is a running one, the function does nothing.
+
 The application is built and deployed with the SAM CLI. 
+
 The project includes the following files and folders.
 
 - submit_model - Code for the application's Lambda function and Project Dockerfile.
