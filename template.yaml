@@ -51,8 +51,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   SubmitModelFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Submit Model Function Lambda Function ARN"
     Value: !GetAtt SubmitModelFunction.Arn
   SubmitModelFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
+    Description: "Implicit IAM Role created for the Lambda function"
     Value: !GetAtt SubmitModelFunctionRole.Arn
