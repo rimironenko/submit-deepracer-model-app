@@ -15,9 +15,11 @@ The application uses several AWS resources, including Lambda function and Amazon
 
 [AWS DeepRacer](https://aws.amazon.com/deepracer/) is an AWS-managed service for studying the basics of Reinforcement Learning (one of the Machine Learning types) in a gamification mode.
 
-In essence, AWS DeepRacer allows a developer to train and deploy a reinforcement learning model onto a small-sized race car (virtual or physical). The performance of the model is measured by the amount of time that it takes for this car to complete from 3 to 5 laps of a simulated (for a virtual car) or real (for a physical car) race track.
+## deepracer-utils
 
-A developer can submit his model to the AWS DeepRacer Virtual Circuit contest. The model will be ranked and compared to models from other developers across the globe by the best (smallest) lap completion time of a specific race track. The best racers have a chance to win different prizes including a trip to an offline final race event.
+The Lambda function code uses `deepracer-utils` Python library from AWS Deepracer Community.
+
+[The library](https://github.com/aws-deepracer-community/deepracer-utils) provides a set of utilities including a `boto3` enhancement that allows to create a client for AWS DeepRacer service.
 
 ## Deploy the sample application
 
