@@ -1,13 +1,23 @@
 # submit-deepracer-model-app
 
-This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
+This project is an AWS serverless application that automatically submits an AWS DeepRacer Model to a given AWS Virtual Circuit race.
+The application is built and deployed with the SAM CLI. 
+The project includes the following files and folders.
 
-- hello_world - Code for the application's Lambda function and Project Dockerfile.
+- submit_model - Code for the application's Lambda function and Project Dockerfile.
 - events - Invocation events that you can use to invoke the function.
 - tests - Unit tests for the application code. 
-- template.yaml - A template that defines the application's AWS resources.
+- template.yaml - A SAM template that defines the application's AWS resources.
 
-The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+The application uses several AWS resources, including Lambda function and Amazon EventBridge. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+
+## AWS DeepRacer
+
+[AWS DeepRacer](https://aws.amazon.com/deepracer/) is an AWS-managed service for studying the basics of Reinforcement Learning (one of the Machine Learning types) in a gamification mode.
+
+In essence, AWS DeepRacer allows a developer to train and deploy a reinforcement learning model onto a small-sized race car (virtual or physical). The performance of the model is measured by the amount of time that it takes for this car to complete from 3 to 5 laps of a simulated (for a virtual car) or real (for a physical car) race track.
+
+A developer can submit his model to the AWS DeepRacer Virtual Circuit contest. The model will be ranked and compared to models from other developers across the globe by the best (smallest) lap completion time of a specific race track. The best racers have a chance to win different prizes including a trip to an offline final race event.
 
 ## Deploy the sample application
 
@@ -32,11 +42,11 @@ The first command will build a docker image from a Dockerfile and then copy the 
 
 * **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
 * **AWS Region**: The AWS region you want to deploy your app to.
+* **ModelArn**: The ARN of an AWS DeepRacer model for the automatic submission.
+* **LeaderboardArn**: The ARN of an AWS DeepRacer race for the model submission to.
 * **Confirm changes before deploy**: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
 * **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
 * **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
-
-You can find your API Gateway Endpoint URL in the output values displayed after deployment.
 
 ## Use the SAM CLI to build and test locally
 
@@ -46,32 +56,16 @@ Build your application with the `sam build` command.
 submit-deepracer-model-app$ sam build
 ```
 
-The SAM CLI builds a docker image from a Dockerfile and then installs dependencies defined in `hello_world/requirements.txt` inside the docker image. The processed template file is saved in the `.aws-sam/build` folder.
+The SAM CLI builds a docker image from a Dockerfile and then installs dependencies defined in `submit_model/requirements.txt` inside the docker image. The processed template file is saved in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
+
+**Please specify your own ARN for a model and for a leaderboard to test thw function for tour AWS Account!**
 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-submit-deepracer-model-app$ sam local invoke HelloWorldFunction --event events/event.json
-```
-
-The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
-
-```bash
-submit-deepracer-model-app$ sam local start-api
-submit-deepracer-model-app$ curl http://localhost:3000/
-```
-
-The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
-
-```yaml
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            Path: /hello
-            Method: get
+submit-deepracer-model-app$ sam local invoke SubmitModelFunction --event events/event.json
 ```
 
 ## Add a resource to your application
@@ -84,7 +78,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-submit-deepracer-model-app$ sam logs -n HelloWorldFunction --stack-name submit-deepracer-model-app --tail
+submit-deepracer-model-app$ sam logs -n SubmitModelFunction --stack-name submit-deepracer-model-app --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -104,6 +98,12 @@ To delete the sample application that you created, use the AWS CLI. Assuming you
 
 ```bash
 aws cloudformation delete-stack --stack-name submit-deepracer-model-app
+```
+
+Alternatively, you can use SAM CLI `delete` command.
+
+```bash
+sam delete
 ```
 
 ## Resources
